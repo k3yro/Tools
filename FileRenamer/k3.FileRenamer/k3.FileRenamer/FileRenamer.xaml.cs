@@ -92,8 +92,15 @@ namespace k3.FileRenamer
             loadPreviewIntoResultView();//2in1
             try
             {
+                //Progressbar
+                pb_rename.Value = 0;
+                int progressHelper = 0;
+
                 foreach (__renameObj item in _renameObj)
                 {
+                    //Progressbar
+                    progressHelper++;
+                    pb_rename.Value = progressHelper * 100 / _fileNamesSrc.Count;
 
                     if (null != cb_fileTyp.SelectedValue)
                     {
@@ -109,6 +116,8 @@ namespace k3.FileRenamer
                         }
                     }
 
+                    
+                    
                     if (item.filenameNew != item.filenameOld)
                     {
                         string fileNew = _folderPath + "\\" + item.filenameNew + item.extension;

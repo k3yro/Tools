@@ -19,7 +19,7 @@
         <Label x:Name="lbl_replace" Content="Replace" HorizontalAlignment="Left" Margin="76,229,0,0" VerticalAlignment="Top" Height="26" Width="51"/>
         <Label x:Name="lbl_search1" Content="Search" HorizontalAlignment="Left" Margin="76,179,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
         <CheckBox x:Name="cb_regex" Content="Use regex" HorizontalAlignment="Left" Margin="101,290,0,0" VerticalAlignment="Top" Height="15" Width="72"/>
-        <ProgressBar HorizontalAlignment="Left" Height="16" Margin="50,367,0,0" VerticalAlignment="Top" Width="302"/>
+        <ProgressBar x:Name="pb_rename" HorizontalAlignment="Left" Height="16" Margin="50,367,0,0" VerticalAlignment="Top" Width="302"/>
         <GroupBox x:Name="gp_select" Header="Select" HorizontalAlignment="Left" Height="118" Margin="50,19,0,0" VerticalAlignment="Top" Width="302"/>
         <Button x:Name="btn_openFolder" Content="Folder" HorizontalAlignment="Left" Margin="76,50,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="Btn_openFolder_Click"/>
         <ComboBox x:Name="cb_fileTyp" HorizontalAlignment="Left" Margin="197,50,0,0" VerticalAlignment="Top" Width="120" Height="22" SelectionChanged="Cb_fileTyp_SelectionChanged"/>
