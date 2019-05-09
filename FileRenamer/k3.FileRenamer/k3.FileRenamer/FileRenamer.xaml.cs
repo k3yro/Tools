@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,14 +25,27 @@ namespace k3.FileRenamer
         private string _folderPath;
         private List<string> _fileNamesSrc;
 
+        struct __renameObj
+        {
+            public string path;
+            public string extension;
+            public string filenameOld;
+            public string filenameNew;
+
+        }
+
+        private List<__renameObj> _renameObj;
+
         public FileRenamer()
         {
             _folderPath = String.Empty;
             _fileNamesSrc = new List<string>();
+            _renameObj = new List<__renameObj>();
 
             InitializeComponent();
         }
 
+        #region Trigger
         private void Btn_openFolder_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -41,6 +55,7 @@ namespace k3.FileRenamer
                 getFilesFromDirectory();
                 fillFileExtensionFilterBox();
                 sb_status.Items.Add("Folder path and list for filter added.");
+                loadAllFileNamesIntoResultView();
             }
             catch (Exception ex)
             {
@@ -48,6 +63,67 @@ namespace k3.FileRenamer
             }
 
         }
+
+        private void Cb_fileTyp_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            loadAllFileNamesIntoResultView();
+        }
+
+        private void Btn_preview_Click(object sender, RoutedEventArgs e)
+        {
+            sb_status.Items.Clear();
+            if (String.IsNullOrEmpty(tb_search.Text) || String.IsNullOrEmpty(tb_replace.Text))
+            {
+                sb_status.Items.Add("Search/replace field empty.");
+                return;
+            }
+            try
+            {
+                _renameObj = null;
+                _renameObj = new List<__renameObj>();
+
+                tbl_result.Text = string.Empty;
+
+                foreach (var item in _fileNamesSrc)
+                {
+                    __renameObj robj = new __renameObj();
+                    robj.path = item;
+                    robj.extension = System.IO.Path.GetExtension(item);
+                    robj.filenameOld = System.IO.Path.GetFileNameWithoutExtension(item);
+                    robj.filenameNew = createNewFilename(robj.filenameOld);
+                    tbl_result.Text += robj.filenameNew + Environment.NewLine;
+                }
+                sb_status.Items.Add("Preview finished.");
+            }
+            catch (Exception ex)
+            {
+                sb_status.Items.Add(ex.Message);
+            }
+        }
+
+        private string createNewFilename(string filenameOld)
+        {
+            if (String.IsNullOrEmpty(tb_search.Text) || String.IsNullOrEmpty(tb_replace.Text))
+            {
+                return filenameOld;
+            }
+            string newFileName = string.Empty;
+            string search = tb_search.Text;
+            string replace = tb_replace.Text;
+
+            if (cb_regex.IsChecked == true)
+            {
+                newFileName = Regex.Replace(filenameOld, search, replace);
+            }
+            else
+            {
+                newFileName = filenameOld.Replace(search, replace);
+            }
+
+            return newFileName;
+        }
+        #endregion
 
         private void fillFileExtensionFilterBox()
         {
@@ -78,12 +154,6 @@ namespace k3.FileRenamer
             //put allFiles to first place
             filter.Insert(0, ".*");
 
-            //add asterisk to all items
-            for (int i = 0; i < filter.Count(); i++)
-            {
-                filter[i] = "*" + filter[i];
-            }
-
             //fill filter box
             cb_fileTyp.ItemsSource = filter;
 
@@ -91,6 +161,8 @@ namespace k3.FileRenamer
 
         private void getFilesFromDirectory()
         {
+            _fileNamesSrc = null;
+            _fileNamesSrc = new List<string>();
             string[] fileEntries = Directory.GetFiles(_folderPath);
             foreach (string fileName in fileEntries)
             {
@@ -98,7 +170,6 @@ namespace k3.FileRenamer
             }
 
         }
-
 
         private void getPathFromFileDialog()
         {
@@ -108,6 +179,31 @@ namespace k3.FileRenamer
 
             _folderPath = dialog.FileName.ToString();
             tb_path.Text = _folderPath;
+        }
+
+        private void loadAllFileNamesIntoResultView()
+        {
+            //clear Resultbox
+            tbl_result.Text = string.Empty;
+
+            //get extension from textbox
+            string extension = string.Empty;
+            if (null != cb_fileTyp.SelectedValue)
+            {
+                extension = cb_fileTyp.SelectedValue.ToString();
+            }
+
+            //print file names
+            foreach (var item in _fileNamesSrc)
+            {
+                string result = string.Empty;
+                string curr_extension = System.IO.Path.GetExtension(item);
+                if (string.IsNullOrEmpty(extension) || curr_extension == extension || ".*" == extension)
+                {
+                    result = System.IO.Path.GetFileNameWithoutExtension(item);
+                    tbl_result.Text += result + Environment.NewLine;
+                }
+            }
         }
     }
 }
