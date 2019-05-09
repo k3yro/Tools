@@ -51,8 +51,7 @@ namespace k3.FileRenamer
             {
                 sb_status.Items.Clear();
                 getPathFromFileDialog();
-                getFilesFromDirectory();
-                fillFileExtensionFilterBox();
+                initFolder();
                 sb_status.Items.Add("Folder path and list for filter added.");
                 loadAllFileNamesIntoResultView();
             }
@@ -114,9 +113,7 @@ namespace k3.FileRenamer
                                 }
                             }
                         }
-                    }
-
-                    
+                    }            
                     
                     if (item.filenameNew != item.filenameOld)
                     {
@@ -127,13 +124,19 @@ namespace k3.FileRenamer
                 }
                 sb_status.Items.Clear();
                 sb_status.Items.Add("Files renamed successfully.");
+                initFolder();
             }
             catch (Exception ex)
             {
-
                 sb_status.Items.Clear();
                 sb_status.Items.Add(ex.Message);
             }
+        }
+
+        private void initFolder()
+        {
+            getFilesFromDirectory();
+            fillFileExtensionFilterBox();
         }
 
         //calls also createNewFilename Method
