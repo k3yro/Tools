@@ -14,7 +14,7 @@
         <GroupBox x:Name="gb_rename" Header="Rename" HorizontalAlignment="Left" Height="199" Margin="50,156,0,0" VerticalAlignment="Top" Width="302"/>
         <TextBox x:Name="tb_search" HorizontalAlignment="Left" Height="23" Margin="101,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202"/>
         <TextBox x:Name="tb_replace" HorizontalAlignment="Left" Height="23" Margin="101,258,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202"/>
-        <Button x:Name="btn_rename" Content="Rename" HorizontalAlignment="Left" Margin="228,325,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+        <Button x:Name="btn_rename" Content="Rename" HorizontalAlignment="Left" Margin="228,325,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="Btn_rename_Click"/>
         <Button x:Name="btn_preview" Content="Preview" HorizontalAlignment="Left" Margin="143,325,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="Btn_preview_Click"/>
         <Label x:Name="lbl_replace" Content="Replace" HorizontalAlignment="Left" Margin="76,229,0,0" VerticalAlignment="Top" Height="26" Width="51"/>
         <Label x:Name="lbl_search1" Content="Search" HorizontalAlignment="Left" Margin="76,179,0,0" VerticalAlignment="Top" Height="26" Width="45"/>

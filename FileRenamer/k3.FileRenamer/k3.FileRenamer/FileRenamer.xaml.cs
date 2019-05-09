@@ -31,7 +31,6 @@ namespace k3.FileRenamer
             public string extension;
             public string filenameOld;
             public string filenameNew;
-
         }
 
         private List<__renameObj> _renameObj;
@@ -72,8 +71,67 @@ namespace k3.FileRenamer
 
         private void Btn_preview_Click(object sender, RoutedEventArgs e)
         {
+            loadPreviewIntoResultView(); //2in1
+        }
+
+        private void Btn_rename_Click(object sender, RoutedEventArgs e)
+        {
+            renameAllFilesInFolder();   
+        }
+        #endregion
+
+        private void renameAllFilesInFolder()
+        {
             sb_status.Items.Clear();
-            if (String.IsNullOrEmpty(tb_search.Text) || String.IsNullOrEmpty(tb_replace.Text))
+            if (String.IsNullOrEmpty(tb_search.Text))
+            {
+                sb_status.Items.Add("Search/replace field empty.");
+                return;
+            }
+
+            loadPreviewIntoResultView();//2in1
+            try
+            {
+                foreach (__renameObj item in _renameObj)
+                {
+
+                    if (null != cb_fileTyp.SelectedValue)
+                    {
+                        if ("" != cb_fileTyp.SelectedValue.ToString())
+                        {
+                            if (".*" != cb_fileTyp.SelectedValue.ToString())
+                            {
+                                if (item.extension != cb_fileTyp.SelectedValue.ToString())
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    if (item.filenameNew != item.filenameOld)
+                    {
+                        string fileNew = _folderPath + "\\" + item.filenameNew + item.extension;
+                        string fileOld = item.path;
+                        File.Move(fileOld, fileNew);
+                    }
+                }
+                sb_status.Items.Clear();
+                sb_status.Items.Add("Files renamed successfully.");
+            }
+            catch (Exception ex)
+            {
+
+                sb_status.Items.Clear();
+                sb_status.Items.Add(ex.Message);
+            }
+        }
+
+        //calls also createNewFilename Method
+        private void loadPreviewIntoResultView()
+        {
+            sb_status.Items.Clear();
+            if (String.IsNullOrEmpty(tb_search.Text))
             {
                 sb_status.Items.Add("Search/replace field empty.");
                 return;
@@ -93,6 +151,7 @@ namespace k3.FileRenamer
                     robj.filenameOld = System.IO.Path.GetFileNameWithoutExtension(item);
                     robj.filenameNew = createNewFilename(robj.filenameOld);
                     tbl_result.Text += robj.filenameNew + Environment.NewLine;
+                    _renameObj.Add(robj);
                 }
                 sb_status.Items.Add("Preview finished.");
             }
@@ -104,7 +163,7 @@ namespace k3.FileRenamer
 
         private string createNewFilename(string filenameOld)
         {
-            if (String.IsNullOrEmpty(tb_search.Text) || String.IsNullOrEmpty(tb_replace.Text))
+            if (String.IsNullOrEmpty(tb_search.Text))
             {
                 return filenameOld;
             }
@@ -123,7 +182,6 @@ namespace k3.FileRenamer
 
             return newFileName;
         }
-        #endregion
 
         private void fillFileExtensionFilterBox()
         {
