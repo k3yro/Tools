@@ -5,8 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:k3.FileRenamer"
         mc:Ignorable="d"
-        Title="FileRenamer" Height="450" Width="800">
+        Title="K3 FileRenamer" Height="480.201" Width="800" ResizeMode="NoResize">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="393*"/>
+            <ColumnDefinition Width="401*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox x:Name="gb_rename" Header="Rename" HorizontalAlignment="Left" Height="213" Margin="50,156,0,0" VerticalAlignment="Top" Width="302"/>
+        <TextBox x:Name="tb_search" HorizontalAlignment="Left" Height="23" Margin="101,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202"/>
+        <TextBox x:Name="tb_replace" HorizontalAlignment="Left" Height="23" Margin="101,263,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202"/>
+        <Button x:Name="btn_rename" Content="Rename" HorizontalAlignment="Left" Margin="228,330,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+        <Button x:Name="btn_replace" Content="Preview" HorizontalAlignment="Left" Margin="143,330,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
+        <Label x:Name="lbl_replace" Content="Replace" HorizontalAlignment="Left" Margin="76,234,0,0" VerticalAlignment="Top" Height="26" Width="51"/>
+        <Label x:Name="lbl_search1" Content="Search" HorizontalAlignment="Left" Margin="76,184,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
+        <CheckBox x:Name="cb_regex" Content="Use regex" HorizontalAlignment="Left" Margin="101,295,0,0" VerticalAlignment="Top" Height="15" Width="72"/>
+        <ProgressBar HorizontalAlignment="Left" Height="16" Margin="50,381,0,0" VerticalAlignment="Top" Width="302"/>
+        <GroupBox x:Name="gp_select" Header="Select" HorizontalAlignment="Left" Height="106" Margin="50,33,0,0" VerticalAlignment="Top" Width="302"/>
+        <Button x:Name="btn_openFolder" Content="Folder" HorizontalAlignment="Left" Margin="76,64,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="Btn_openFolder_Click"/>
+        <ComboBox x:Name="cb_fileTyp" HorizontalAlignment="Left" Margin="197,64,0,0" VerticalAlignment="Top" Width="120" Height="22"/>
+        <TextBox x:Name="tb_path" HorizontalAlignment="Left" Height="23" Margin="76,96,0,0" TextWrapping="Wrap" Text="..." VerticalAlignment="Top" Width="241" IsEnabled="False"/>
+        <GroupBox x:Name="gb_result" Grid.Column="1" Header="Result" HorizontalAlignment="Left" Height="364" Margin="37,33,0,0" VerticalAlignment="Top" Width="315">
+        </GroupBox>
+        <ScrollViewer x:Name="sv_result" Grid.Column="1" HorizontalAlignment="Left" Height="311" Margin="55,64,0,0" VerticalAlignment="Top" Width="282" VerticalScrollBarVisibility="Auto">
+            <TextBlock x:Name="tbl_result" TextWrapping="Wrap" VerticalAlignment="Top"  Grid.Column="1"/>
+        </ScrollViewer>
+        <StatusBar x:Name="sb_status" HorizontalAlignment="Left" Height="31" Margin="0,414,0,0" VerticalAlignment="Top" Width="794" Grid.ColumnSpan="2"/>
+
+
     </Grid>
 </Window>
