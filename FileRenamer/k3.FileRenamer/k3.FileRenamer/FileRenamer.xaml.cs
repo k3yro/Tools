@@ -70,16 +70,16 @@ namespace k3.FileRenamer
 
         private void Btn_preview_Click(object sender, RoutedEventArgs e)
         {
-            loadPreviewIntoResultView(); //2in1
+            renameAllFilesInFolder(true/*preview*/);
         }
 
         private void Btn_rename_Click(object sender, RoutedEventArgs e)
         {
-            renameAllFilesInFolder();   
+            renameAllFilesInFolder(false/*no preview*/);
         }
         #endregion
 
-        private void renameAllFilesInFolder()
+        private void renameAllFilesInFolder(bool preview)
         {
             sb_status.Items.Clear();
             if (String.IsNullOrEmpty(tb_search.Text))
@@ -88,18 +88,23 @@ namespace k3.FileRenamer
                 return;
             }
 
-            loadPreviewIntoResultView();//2in1
             try
             {
+                loadPreviewIntoResultView();//2in1
+
                 //Progressbar
                 pb_rename.Value = 0;
                 int progressHelper = 0;
+                tbl_result.Text = string.Empty;
 
                 foreach (__renameObj item in _renameObj)
                 {
-                    //Progressbar
-                    progressHelper++;
-                    pb_rename.Value = progressHelper * 100 / _fileNamesSrc.Count;
+                    if (!preview)
+                    {
+                        //Progressbar
+                        progressHelper++;
+                        pb_rename.Value = progressHelper * 100 / _fileNamesSrc.Count;
+                    }
 
                     if (null != cb_fileTyp.SelectedValue)
                     {
@@ -119,7 +124,13 @@ namespace k3.FileRenamer
                     {
                         string fileNew = _folderPath + "\\" + item.filenameNew + item.extension;
                         string fileOld = item.path;
-                        File.Move(fileOld, fileNew);
+
+                        if (!preview)
+                        {
+                            File.Move(fileOld, fileNew);
+                        }
+
+                        tbl_result.Text += item.filenameNew + item.extension + Environment.NewLine;
                     }
                 }
                 sb_status.Items.Clear();
@@ -142,34 +153,19 @@ namespace k3.FileRenamer
         //calls also createNewFilename Method
         private void loadPreviewIntoResultView()
         {
-            sb_status.Items.Clear();
-            if (String.IsNullOrEmpty(tb_search.Text))
-            {
-                sb_status.Items.Add("Search/replace field empty.");
-                return;
-            }
-            try
-            {
-                _renameObj = null;
-                _renameObj = new List<__renameObj>();
+            _renameObj = null;
+            _renameObj = new List<__renameObj>();
 
-                tbl_result.Text = string.Empty;
+            tbl_result.Text = string.Empty;
 
-                foreach (var item in _fileNamesSrc)
-                {
-                    __renameObj robj = new __renameObj();
-                    robj.path = item;
-                    robj.extension = System.IO.Path.GetExtension(item);
-                    robj.filenameOld = System.IO.Path.GetFileNameWithoutExtension(item);
-                    robj.filenameNew = createNewFilename(robj.filenameOld);
-                    tbl_result.Text += robj.filenameNew + Environment.NewLine;
-                    _renameObj.Add(robj);
-                }
-                sb_status.Items.Add("Preview finished.");
-            }
-            catch (Exception ex)
+            foreach (var item in _fileNamesSrc)
             {
-                sb_status.Items.Add(ex.Message);
+                __renameObj robj = new __renameObj();
+                robj.path = item;
+                robj.extension = System.IO.Path.GetExtension(item);
+                robj.filenameOld = System.IO.Path.GetFileNameWithoutExtension(item);
+                robj.filenameNew = createNewFilename(robj.filenameOld);
+                _renameObj.Add(robj);
             }
         }
 
@@ -271,7 +267,7 @@ namespace k3.FileRenamer
                 if (string.IsNullOrEmpty(extension) || curr_extension == extension || ".*" == extension)
                 {
                     result = System.IO.Path.GetFileNameWithoutExtension(item);
-                    tbl_result.Text += result + Environment.NewLine;
+                    tbl_result.Text += result + curr_extension + Environment.NewLine;
                 }
             }
         }
