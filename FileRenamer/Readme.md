@@ -1,4 +1,5 @@
 # K3 FileRenamer
+[Download (v1.0)](https://github.com/k3yro/Tools/releases/download/v1.0/Setup.exe "Download")
 ## Requirements
 - .Net Framework 4.7.2
 - A folder full of files
