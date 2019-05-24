@@ -1,4 +1,9 @@
 # K3 FileRenamer
+
+Simple tool to rename a large number of files in a folder.
+
+![Alt text](Screenshot.PNG?raw=true "Screenshot")
+
 [Download (v1.0)](https://github.com/k3yro/Tools/releases/download/v1.0/Setup.exe "Download")
 ## Requirements
 - .Net Framework 4.7.2
